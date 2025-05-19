@@ -8,6 +8,8 @@ export const registerUser = async (
   role: string
 ) => {
   const hashed = await bcrypt.hash(password, 10);
+  const userExist = await prisma.user.findUnique({ where: { email } });
+  if (userExist) throw Error("Email Already Exist");
   const user = await prisma.user.create({
     data: { email, password: hashed, role, name: "jeet", lastname: "patel" },
   });
